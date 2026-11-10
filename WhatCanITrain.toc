@@ -1,0 +1,19 @@
+## Interface: 16001
+## Title: What Can I Train
+## Notes: Shows what your class, weapon, pet and profession trainers can teach you, with a shopping list and a Buy All button at the trainer. Lists are read from the trainer window - no built-in spell data.
+## Author: HexToolFactory
+## Version: @project-version@
+## Category: Class
+## SavedVariables: WhatCanITrainDB
+## DefaultState: Enabled
+
+libs\LibStub.lua
+libs\CallbackHandler-1.0.lua
+libs\LibDataBroker-1.1.lua
+
+Localization.lua
+Core.lua
+Scanner.lua
+Data.lua
+UI.lua
+Broker.lua
