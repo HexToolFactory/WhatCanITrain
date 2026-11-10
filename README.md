@@ -22,7 +22,7 @@ what it costs, and what comes next - with a shopping list and a **Buy All** butt
 - `/wcit reset` - forget all recorded trainer data
 
 ## Credits
-Modelled on [What's Training?](https://www.curseforge.com/wow/addons/whats-training) by Sveng (MIT).
+Modelled on [What's Training?](https://www.curseforge.com/wow/addons/whats-training) by Fusionpit / Sveng (MIT).
 This addon is a separate implementation for WoW: Forever that reads the trainer window instead of shipping spell data.
 
 ## License

@@ -4,6 +4,7 @@
 ## Author: HexToolFactory
 ## Version: @project-version@
 ## Category: Class
+## X-Curse-Project-ID: 1795898
 ## SavedVariables: WhatCanITrainDB
 ## DefaultState: Enabled
 
