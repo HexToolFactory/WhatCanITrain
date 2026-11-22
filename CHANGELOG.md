@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+- Fixed: on some logins your unchecked skills and known spells were gone, so already known ranks showed as available and Buy All bought unchecked skills. WoW: Forever reports the realm as empty (or as the current layer) at login, which split a character's data. Characters are now stored by their unique ID; existing data is merged back automatically.
+- Buy All now also recognises an unchecked skill when the trainer does not report its spell id.
+
 ## 1.0.0
 - First public version for WoW: Forever.
 - Training list in its own spellbook tab (class, weapon and pet training) and in the profession window.

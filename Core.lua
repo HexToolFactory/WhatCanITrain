@@ -54,6 +54,39 @@ local function initPlayer()
     }
 end
 
+-- Per-character data is keyed by the player GUID. Forever's GetRealmName() returns the
+-- layer ("... Realm 1 PvE" / "Realm 5") or even "" at login, so "name-realm" keys split
+-- one character into several entries (the checkboxes and known list then went missing).
+local function characterKey()
+    local name = UnitName("player") or "?"
+    local ok, guid = pcall(function()
+        local g = UnitGUID("player")
+        if type(g) == "string" and strmatch(g, "^Player%-") then return g end
+    end)
+    return (ok and guid) or name, name
+end
+
+-- Folds the old "name-realm" entries of this character into its new entry: a skill
+-- unchecked or known in any of them stays so.
+local function adoptOldEntries(chars, char, name)
+    local prefix = name .. "-"
+    for key, old in pairs(chars) do
+        if old ~= char and type(old) == "table" and (key == name or strsub(key, 1, #prefix) == prefix)
+            and not strmatch(key, "^Player%-") then
+            for _, field in ipairs({ "known", "ignored", "blocked", "scanned", "reqHas" }) do
+                if type(old[field]) == "table" then
+                    char[field] = char[field] or {}
+                    for k, v in pairs(old[field]) do
+                        if char[field][k] == nil or v == true then char[field][k] = v end
+                    end
+                end
+            end
+            if old.view and not char.view then char.view = old.view end
+            chars[key] = nil
+        end
+    end
+end
+
 local function initDB()
     local db = WhatCanITrainDB
     local locale = GetLocale()
@@ -70,9 +103,13 @@ local function initDB()
     db.chars = db.chars or {}
     wt.db = db
 
-    local charKey = (UnitName("player") or "?") .. "-" .. (GetRealmName() or "?")
-    local char = db.chars[charKey] or {}
-    db.chars[charKey] = char
+    local charKey, name = characterKey()
+    local char = db.chars[charKey]
+    if not char then
+        char = {}
+        db.chars[charKey] = char
+        adoptOldEntries(db.chars, char, name)
+    end
     char.known = char.known or {}       -- service key -> true (trainer listed it as already known)
     char.reqHas = char.reqHas or {}     -- required ability name -> had it at the last trainer visit
     char.blocked = char.blocked or {}   -- service key -> true (unavailable for a reason we cannot see)

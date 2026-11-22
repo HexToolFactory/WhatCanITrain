@@ -43,8 +43,17 @@ end
 function wt.TrainerServiceKey(index)
     local name, _, _, _, subText = wt.try(GetTrainerServiceInfo, index)
     if not nonEmpty(name) then return end
+    local sub = nonEmpty(subText)
     local refType, id = serviceRef(index)
-    return makeKey(refType, id, name, nonEmpty(subText))
+    if refType then return makeKey(refType, id, name, sub) end
+    -- No spell id this time: find the entry recorded under its id by name and rank, so
+    -- an unchecked skill is still recognised.
+    for _, group in pairs(wt.db and wt.db.groups or {}) do
+        for key, svc in pairs(group.services) do
+            if svc.name == name and svc.sub == sub then return key end
+        end
+    end
+    return makeKey(nil, nil, name, sub)
 end
 
 local function readServices()
